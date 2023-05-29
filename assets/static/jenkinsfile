@@ -1,6 +1,6 @@
 pipeline {
     parameters {
-        string(name: 'ip', defaultValue: '52.207.237.110', description: 'server ip to depoy (This is to parametrize the server ip when it changes on every redeploy)')
+        string(name: 'ip', defaultValue: '44.208.26.102', description: 'server ip to depoy (This is to parametrize the server ip when it changes on every redeploy)')
 
     }
     agent any
@@ -21,7 +21,7 @@ pipeline {
                     unstash 'assets'
                     sh 'ls'
                     sh 'cd assets/static; unzip static_files.zip'
-                    sh 'ls'
+                    sh 'cd assets/static; ls'
 
                     script {
 
@@ -32,7 +32,7 @@ pipeline {
                         }
                     }
                     sh "scp -o StrictHostKeyChecking=no -r assets ec2-user@${params.ip}:/home/ec2-user"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ec2-user@${params.ip} 'cd assets/dynamic && docker build -t static_app . && docker run --name static_app -p 8080:8080 -d static_app'"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ec2-user@${params.ip} 'cd assets/static && docker build -t static_app . && docker run --name static_app -p 8080:8080 -d static_app'"
                 }   
             }
 
