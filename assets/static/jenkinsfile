@@ -17,7 +17,7 @@ pipeline {
 
         stage('ssh-web-server-agent'){
             steps {
-                sshagent(['ssh-web-server']) {
+                sshagent(['ssh-app-server']) {
                     unstash 'assets'
                     sh 'ls'
                     sh 'cd assets/static; unzip -o static_files.zip'
