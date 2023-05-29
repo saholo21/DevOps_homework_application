@@ -1,0 +1,24 @@
+pipeline {
+    
+    agent any
+    
+    stages {
+
+        stage('Checkout') 
+        {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/saholo21/DevOps_homework_application.git']]])
+            }
+        }
+
+        stage('ssh-app-server-agent'){
+            steps {
+                sshagent(['ssh-app-server']) {
+                    sh 'scp -o StrictHostKeyChecking=no -r /assets/dynamic ec2-user@54.165.65.209:/assets/dynamic'
+                }   
+            }
+
+        }
+
+    }
+}
