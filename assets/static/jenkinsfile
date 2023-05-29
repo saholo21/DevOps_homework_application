@@ -20,7 +20,7 @@ pipeline {
                 sshagent(['ssh-web-server']) {
                     unstash 'assets'
                     sh 'ls'
-                    sh 'cd assets/static; unzip static_files.zip'
+                    sh 'cd assets/static; unzip -o static_files.zip'
                     sh 'cd assets/static; ls'
 
                     script {
