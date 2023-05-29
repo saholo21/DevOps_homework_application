@@ -8,13 +8,18 @@ pipeline {
         {
             steps {
                 checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/saholo21/DevOps_homework_application.git']]])
+                stash includes: 'assets/dynamic/**', name: 'assets'
             }
         }
 
         stage('ssh-app-server-agent'){
             steps {
                 sshagent(['ssh-app-server']) {
-                    sh 'scp -o StrictHostKeyChecking=no -r /assets/dynamic ec2-user@54.165.65.209:/assets/dynamic'
+                    unstash 'assets'
+                    sh 'ls'
+                    sh 'cd assets; ls'
+                    sh 'scp -o StrictHostKeyChecking=no -r assets ec2-user@54.165.65.209:/home/ec2-user'
+                    sh 'ssh -tt -o StrictHostKeyChecking=no ec2-user@54.165.65.209 "cd assets/dynamic && docker build -t dynamic_app . && docker run -p 8082:8080 -d dynamic_app"'
                 }   
             }
 
