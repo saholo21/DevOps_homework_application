@@ -32,7 +32,7 @@ pipeline {
                         }
                     }
                     sh "scp -o StrictHostKeyChecking=no -r assets ec2-user@${params.ip}:/home/ec2-user"
-                    sh "ssh -tt -o StrictHostKeyChecking=no ec2-user@${params.ip} 'cd assets/static && docker build -t static_app . && docker run --name static_app -p 8082:8080 -d static_app'"
+                    sh "ssh -tt -o StrictHostKeyChecking=no ec2-user@${params.ip} 'cd assets/static && docker build -t static_app . && docker run --name static_app -p 8082:8082 -d static_app'"
                 }   
             }
 
